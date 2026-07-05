@@ -1,19 +1,25 @@
-function App() {
+import { Routes, Route } from "react-router-dom";
+
+import Container from "./components/Container";
+
+import Home from "./pages/Home";
+import Categories from "./pages/Categories";
+import Decks from "./pages/Decks";
+import Settings from "./pages/Settings";
+import About from "./pages/About";
+import NotFound from "./pages/NotFound";
+
+export default function App() {
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white px-6">
-      <h1 className="text-5xl font-bold text-orange-400">
-        🎮 Maathe Pe
-      </h1>
-
-      <p className="mt-4 text-xl text-slate-300 text-center">
-        The Ultimate Indian Heads Up Game
-      </p>
-
-      <button className="mt-10 bg-orange-500 hover:bg-orange-600 transition px-8 py-3 rounded-xl text-lg font-semibold">
-        Coming Soon 🚀
-      </button>
-    </div>
+    <Container>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/categories/:categoryId" element={<Decks />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Container>
   );
 }
-
-export default App;

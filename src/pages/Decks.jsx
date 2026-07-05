@@ -21,8 +21,7 @@ export default function Decks() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-
+    <div className="flex min-h-screen flex-col">
       {/* Header */}
 
       <motion.div
@@ -58,13 +57,14 @@ export default function Decks() {
       {/* Deck List */}
 
       <div className="space-y-4">
-
         {deckList.map((deck) => (
           <motion.button
             key={deck.id}
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => alert("Game screen coming next!")}
+            onClick={() =>
+              navigate(`/play/${categoryId}/${deck.id}`)
+            }
             className="group flex w-full items-center justify-between rounded-3xl border border-white/10 bg-[#151E2E] p-5 transition hover:border-orange-400/30 hover:bg-[#1B2638]"
           >
             <div className="text-left">
@@ -82,9 +82,7 @@ export default function Decks() {
             />
           </motion.button>
         ))}
-
       </div>
-
     </div>
   );
 }

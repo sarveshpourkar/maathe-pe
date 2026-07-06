@@ -6,8 +6,11 @@ export default function useDeviceTilt({
 }) {
   useEffect(() => {
     function handleOrientation(event) {
-      alert(`Beta: ${Math.round(event.beta ?? 0)}`);
-    }
+  alert(
+    `Beta: ${Math.round(event.beta ?? 0)}
+Gamma: ${Math.round(event.gamma ?? 0)}`
+  );
+}
 
     window.addEventListener("deviceorientation", handleOrientation);
 

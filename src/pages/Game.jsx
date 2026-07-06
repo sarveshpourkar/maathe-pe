@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import categories from "../data/categories";
 import decks from "../data/decks";
+import { getWords } from "../data/words";
 import useTimer from "../hooks/useTimer";
+import shuffle from "../utils/shuffle";
 
 export default function Game() {
   const { categoryId, deckId } = useParams();
@@ -14,11 +16,55 @@ export default function Game() {
   const deck = (decks[categoryId] || []).find((d) => d.id === deckId);
 
   const { timeLeft } = useTimer(60);
+
+  const [words, setWords] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [correct, setCorrect] = useState(0);
+  const [passed, setPassed] = useState(0);
+
   useEffect(() => {
-  if (timeLeft === 0) {
-    navigate("/results");
-  }
-}, [timeLeft, navigate]);
+    const movieWords = getWords(categoryId, deckId);
+    setWords(shuffle(movieWords));
+  }, [categoryId, deckId]);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      navigate("/results", {
+        state: {
+          correct,
+          passed,
+        },
+      });
+    }
+  }, [timeLeft, correct, passed, navigate]);
+
+  const currentWord =
+    words[currentIndex]?.word || "Loading...";
+
+  function nextCorrect() {
+  setCorrect((c) => c + 1);
+
+  setCurrentIndex((i) => {
+    if (i + 1 >= words.length) {
+      setWords(shuffle([...words]));
+      return 0;
+    }
+    return i + 1;
+  });
+}
+
+  function nextPass() {
+  setPassed((p) => p + 1);
+
+  setCurrentIndex((i) => {
+    if (i + 1 >= words.length) {
+      setWords(shuffle([...words]));
+      return 0;
+    }
+    return i + 1;
+  });
+}
 
   return (
     <motion.div
@@ -29,7 +75,6 @@ export default function Game() {
       {/* Header */}
 
       <div className="flex items-center justify-between">
-
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-orange-400">
             {category?.title}
@@ -45,35 +90,50 @@ export default function Game() {
             {timeLeft}
           </span>
         </div>
-
       </div>
 
       {/* Word Card */}
 
       <div className="flex flex-1 items-center justify-center">
-
         <motion.div
+          key={currentWord}
           layout
           className="flex h-72 w-full items-center justify-center rounded-[32px] border border-white/10 bg-[#151E2E] p-8"
         >
           <h2 className="text-center text-5xl font-black text-white">
-            Ready?
+            {currentWord}
           </h2>
         </motion.div>
+      </div>
 
+      {/* Buttons */}
+
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <button
+          onClick={nextCorrect}
+          className="rounded-2xl bg-green-500 py-5 text-xl font-bold text-white active:scale-95"
+        >
+          Correct
+        </button>
+
+        <button
+          onClick={nextPass}
+          className="rounded-2xl bg-red-500 py-5 text-xl font-bold text-white active:scale-95"
+        >
+          Pass
+        </button>
       </div>
 
       {/* Bottom Score */}
 
       <div className="mb-2 flex justify-between rounded-2xl border border-white/10 bg-[#151E2E] px-6 py-5">
-
         <div className="text-center">
           <p className="text-sm text-slate-400">
             Correct
           </p>
 
           <h2 className="mt-1 text-3xl font-black text-green-400">
-            0
+            {correct}
           </h2>
         </div>
 
@@ -85,12 +145,10 @@ export default function Game() {
           </p>
 
           <h2 className="mt-1 text-3xl font-black text-red-400">
-            0
+            {passed}
           </h2>
         </div>
-
       </div>
-
     </motion.div>
   );
 }

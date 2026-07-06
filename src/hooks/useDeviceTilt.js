@@ -5,36 +5,34 @@ export default function useDeviceTilt({
   onPass,
 }) {
   useEffect(() => {
-    let cooldown = false;
+    let ready = true;
 
     function handleOrientation(event) {
-      if (cooldown) return;
-
       const beta = event.beta ?? 0;
       const gamma = event.gamma ?? 0;
 
-      // Correct (phone tilted downward)
-      if (beta > 150 && gamma > 20) {
-        cooldown = true;
-        onCorrect?.();
-        navigator.vibrate?.(80);
-
-        setTimeout(() => {
-          cooldown = false;
-        }, 800);
-
+      // Phone has returned to the normal playing position
+      if (gamma < -65) {
+        ready = true;
         return;
       }
 
-      // Pass (phone tilted upward)
-      if (beta > -20 && beta < 20 && gamma > -55) {
-        cooldown = true;
-        onPass?.();
-        navigator.vibrate?.(80);
+      // Don't trigger again until the phone returns to normal
+      if (!ready) return;
 
-        setTimeout(() => {
-          cooldown = false;
-        }, 800);
+      // Correct (tilt downward)
+      if (beta > 150 && gamma > 20) {
+        ready = false;
+        navigator.vibrate?.(80);
+        onCorrect?.();
+        return;
+      }
+
+      // Pass (tilt upward)
+      if (beta > -20 && beta < 20 && gamma > -50 && gamma < -20) {
+        ready = false;
+        navigator.vibrate?.(80);
+        onPass?.();
       }
     }
 

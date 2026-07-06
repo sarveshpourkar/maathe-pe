@@ -12,6 +12,7 @@ import Game from "./pages/Game";
 import Settings from "./pages/Settings";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import Results from "./pages/Results";
 
 export default function App() {
   return (
@@ -45,6 +46,8 @@ export default function App() {
           path="/game/:categoryId/:deckId"
           element={<Game />}
         />
+
+        <Route path="/results" element={<Results />} />
 
         <Route path="/settings" element={<Settings />} />
 

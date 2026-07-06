@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { Check, Timer, X } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import categories from "../data/categories";
 import decks from "../data/decks";
@@ -8,35 +8,39 @@ import useTimer from "../hooks/useTimer";
 
 export default function Game() {
   const { categoryId, deckId } = useParams();
+  const navigate = useNavigate();
 
   const category = categories.find((c) => c.id === categoryId);
   const deck = (decks[categoryId] || []).find((d) => d.id === deckId);
 
   const { timeLeft } = useTimer(60);
+  useEffect(() => {
+  if (timeLeft === 0) {
+    navigate("/results");
+  }
+}, [timeLeft, navigate]);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex h-screen flex-col bg-[#08111F] px-6 py-5"
+      className="flex min-h-screen flex-col px-6 py-8"
     >
       {/* Header */}
 
       <div className="flex items-center justify-between">
 
         <div>
-          <p className="text-xs uppercase tracking-[0.35em] text-orange-400">
+          <p className="text-sm uppercase tracking-[0.3em] text-orange-400">
             {category?.title}
           </p>
 
-          <h1 className="mt-1 text-xl font-bold text-white">
+          <h1 className="mt-1 text-2xl font-black text-white">
             {deck?.title}
           </h1>
         </div>
 
-        <div className="flex items-center gap-2 rounded-2xl bg-orange-500 px-4 py-3">
-          <Timer size={20} className="text-white" />
-
+        <div className="rounded-2xl bg-orange-500 px-5 py-3">
           <span className="text-2xl font-black text-white">
             {timeLeft}
           </span>
@@ -44,59 +48,45 @@ export default function Game() {
 
       </div>
 
-      {/* Word */}
+      {/* Word Card */}
 
       <div className="flex flex-1 items-center justify-center">
 
         <motion.div
           layout
-          className="flex h-72 w-full items-center justify-center rounded-[34px] border border-white/10 bg-[#111B2D]"
+          className="flex h-72 w-full items-center justify-center rounded-[32px] border border-white/10 bg-[#151E2E] p-8"
         >
-          <h2 className="px-6 text-center text-5xl font-black leading-tight text-white">
-            PLACE PHONE
-            <br />
-            ON FOREHEAD
+          <h2 className="text-center text-5xl font-black text-white">
+            Ready?
           </h2>
         </motion.div>
 
       </div>
 
-      {/* Footer */}
+      {/* Bottom Score */}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="mb-2 flex justify-between rounded-2xl border border-white/10 bg-[#151E2E] px-6 py-5">
 
-        <div className="rounded-3xl bg-green-500/10 p-5 text-center">
-
-          <Check
-            className="mx-auto mb-2 text-green-400"
-            size={28}
-          />
-
-          <p className="text-sm text-white/60">
+        <div className="text-center">
+          <p className="text-sm text-slate-400">
             Correct
           </p>
 
           <h2 className="mt-1 text-3xl font-black text-green-400">
             0
           </h2>
-
         </div>
 
-        <div className="rounded-3xl bg-red-500/10 p-5 text-center">
+        <div className="h-14 w-px bg-white/10" />
 
-          <X
-            className="mx-auto mb-2 text-red-400"
-            size={28}
-          />
-
-          <p className="text-sm text-white/60">
+        <div className="text-center">
+          <p className="text-sm text-slate-400">
             Passed
           </p>
 
           <h2 className="mt-1 text-3xl font-black text-red-400">
             0
           </h2>
-
         </div>
 
       </div>

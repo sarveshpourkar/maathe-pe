@@ -1,16 +1,13 @@
 import { useEffect } from "react";
 
-export default function useDeviceTilt({
-  onCorrect,
-  onPass,
-}) {
+export default function useDeviceTilt({ onTilt }) {
   useEffect(() => {
     function handleOrientation(event) {
-  alert(
-    `Beta: ${Math.round(event.beta ?? 0)}
-Gamma: ${Math.round(event.gamma ?? 0)}`
-  );
-}
+      onTilt?.({
+        beta: Math.round(event.beta ?? 0),
+        gamma: Math.round(event.gamma ?? 0),
+      });
+    }
 
     window.addEventListener("deviceorientation", handleOrientation);
 
@@ -20,5 +17,5 @@ Gamma: ${Math.round(event.gamma ?? 0)}`
         handleOrientation
       );
     };
-  }, []);
+  }, [onTilt]);
 }

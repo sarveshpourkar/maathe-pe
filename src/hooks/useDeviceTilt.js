@@ -5,45 +5,17 @@ export default function useDeviceTilt({
   onPass,
 }) {
   useEffect(() => {
-    let cooldown = false;
-
     function handleOrientation(event) {
-      if (cooldown) return;
-
-      const beta = event.beta;
-
-      if (beta == null) return;
-
-      // Phone tilted downward
-      if (beta > 45) {
-        cooldown = true;
-        onCorrect?.();
-
-        setTimeout(() => {
-          cooldown = false;
-        }, 1000);
-      }
-
-      // Phone tilted upward
-      if (beta < -45) {
-        cooldown = true;
-        onPass?.();
-
-        setTimeout(() => {
-          cooldown = false;
-        }, 1000);
-      }
+      alert(`Beta: ${Math.round(event.beta ?? 0)}`);
     }
 
-    window.addEventListener(
-      "deviceorientation",
-      handleOrientation
-    );
+    window.addEventListener("deviceorientation", handleOrientation);
 
-    return () =>
+    return () => {
       window.removeEventListener(
         "deviceorientation",
         handleOrientation
       );
-  }, [onCorrect, onPass]);
+    };
+  }, []);
 }

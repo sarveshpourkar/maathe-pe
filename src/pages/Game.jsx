@@ -7,6 +7,7 @@ import decks from "../data/decks";
 import { getWords } from "../data/words";
 import useTimer from "../hooks/useTimer";
 import shuffle from "../utils/shuffle";
+import useDeviceTilt from "../hooks/useDeviceTilt";
 
 export default function Game() {
   const { categoryId, deckId } = useParams();
@@ -65,6 +66,11 @@ export default function Game() {
     return i + 1;
   });
 }
+
+useDeviceTilt({
+  onCorrect: nextCorrect,
+  onPass: nextPass,
+});
 
   return (
     <motion.div

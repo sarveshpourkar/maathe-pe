@@ -23,10 +23,6 @@ export default function Game() {
 
   const [correct, setCorrect] = useState(0);
   const [passed, setPassed] = useState(0);
-  const [tilt, setTilt] = useState({
-  beta: 0,
-  gamma: 0,
-});
 
   useEffect(() => {
     const movieWords = getWords(categoryId, deckId);
@@ -72,7 +68,8 @@ export default function Game() {
 }
 
 useDeviceTilt({
-  onTilt: setTilt,
+  onCorrect: nextCorrect,
+  onPass: nextPass,
 });
 
   return (
@@ -101,10 +98,6 @@ useDeviceTilt({
         </div>
       </div>
 
-      <div className="mb-4 rounded-xl bg-black/40 p-3 text-center text-white">
-  <div>Beta: {tilt.beta}</div>
-  <div>Gamma: {tilt.gamma}</div>
-</div>
 
       {/* Word Card */}
 

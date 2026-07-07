@@ -6,37 +6,51 @@ export default function useDeviceTilt({
 }) {
   useEffect(() => {
     let ready = true;
+    let locked = false;
+
+    function trigger(callback) {
+      ready = false;
+      locked = true;
+
+      navigator.vibrate?.(80);
+      callback?.();
+
+      // Ignore ALL sensor events for 1.5 seconds
+      setTimeout(() => {
+        locked = false;
+      }, 1500);
+    }
 
     function handleOrientation(event) {
+      if (locked) return;
+
       const beta = event.beta ?? 0;
       const gamma = event.gamma ?? 0;
 
-      // Phone has returned to the normal playing position
+      // Rearm only after returning to normal
       if (gamma < -65) {
         ready = true;
         return;
       }
 
-      // Don't trigger again until the phone returns to normal
       if (!ready) return;
 
-      // Correct (tilt downward)
+      // Correct (tilt down)
       if (beta > 150 && gamma > 20) {
-        ready = false;
-        navigator.vibrate?.(80);
-        onCorrect?.();
+        trigger(onCorrect);
         return;
       }
 
-      // Pass (tilt upward)
+      // Pass (tilt up)
       if (beta > -20 && beta < 20 && gamma > -50 && gamma < -20) {
-        ready = false;
-        navigator.vibrate?.(80);
-        onPass?.();
+        trigger(onPass);
       }
     }
 
-    window.addEventListener("deviceorientation", handleOrientation);
+    window.addEventListener(
+      "deviceorientation",
+      handleOrientation
+    );
 
     return () => {
       window.removeEventListener(

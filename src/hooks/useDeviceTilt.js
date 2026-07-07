@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { getCalibration } from "../utils/calibration";
 
 export default function useDeviceTilt({ onTilt }) {
   const state = useRef("READY");
@@ -8,6 +9,8 @@ export default function useDeviceTilt({ onTilt }) {
     function handleOrientation(event) {
       const beta = event.beta ?? 0;
       const gamma = event.gamma ?? 0;
+
+      const normal = getCalibration();
 
       switch (state.current) {
         // ---------------- READY ----------------
@@ -41,7 +44,10 @@ export default function useDeviceTilt({ onTilt }) {
 
         case "WAIT_NORMAL": {
           // Back to forehead position
-          if (gamma < -65) {
+          if (
+  Math.abs(beta - normal.beta) < 15 &&
+  Math.abs(gamma - normal.gamma) < 15
+) {
             if (!normalTimer.current) {
               normalTimer.current = setTimeout(() => {
                 state.current = "READY";

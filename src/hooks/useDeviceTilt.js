@@ -1,49 +1,66 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-export default function useDeviceTilt({
-  onCorrect,
-  onPass,
-}) {
+export default function useDeviceTilt({ onTilt }) {
+  const state = useRef("READY");
+  const normalTimer = useRef(null);
+
   useEffect(() => {
-    let ready = true;
-    let locked = false;
-
-    function trigger(callback) {
-      ready = false;
-      locked = true;
-
-      navigator.vibrate?.(80);
-      callback?.();
-
-      // Ignore ALL sensor events for 1.5 seconds
-      setTimeout(() => {
-        locked = false;
-      }, 1500);
-    }
-
     function handleOrientation(event) {
-      if (locked) return;
-
       const beta = event.beta ?? 0;
       const gamma = event.gamma ?? 0;
 
-      // Rearm only after returning to normal
-      if (gamma < -65) {
-        ready = true;
-        return;
-      }
+      switch (state.current) {
+        // ---------------- READY ----------------
 
-      if (!ready) return;
+        case "READY": {
+          // Correct
+          if (beta > 150 && gamma > 20) {
+            state.current = "WAIT_NORMAL";
+            navigator.vibrate?.(80);
+            onTilt?.("correct");
+            return;
+          }
 
-      // Correct (tilt down)
-      if (beta > 150 && gamma > 20) {
-        trigger(onCorrect);
-        return;
-      }
+          // Pass
+          if (
+            beta > -20 &&
+            beta < 20 &&
+            gamma > -50 &&
+            gamma < -20
+          ) {
+            state.current = "WAIT_NORMAL";
+            navigator.vibrate?.(80);
+            onTilt?.("pass");
+            return;
+          }
 
-      // Pass (tilt up)
-      if (beta > -20 && beta < 20 && gamma > -50 && gamma < -20) {
-        trigger(onPass);
+          break;
+        }
+
+        // ---------------- WAIT NORMAL ----------------
+
+        case "WAIT_NORMAL": {
+          // Back to forehead position
+          if (gamma < -65) {
+            if (!normalTimer.current) {
+              normalTimer.current = setTimeout(() => {
+                state.current = "READY";
+                normalTimer.current = null;
+              }, 400);
+            }
+          } else {
+            // Still moving -> cancel timer
+            if (normalTimer.current) {
+              clearTimeout(normalTimer.current);
+              normalTimer.current = null;
+            }
+          }
+
+          break;
+        }
+
+        default:
+          break;
       }
     }
 
@@ -53,10 +70,14 @@ export default function useDeviceTilt({
     );
 
     return () => {
+      if (normalTimer.current) {
+        clearTimeout(normalTimer.current);
+      }
+
       window.removeEventListener(
         "deviceorientation",
         handleOrientation
       );
     };
-  }, [onCorrect, onPass]);
+  }, [onTilt]);
 }

@@ -24,6 +24,8 @@ export default function Game() {
   const [correct, setCorrect] = useState(0);
   const [passed, setPassed] = useState(0);
 
+  const [gameLocked, setGameLocked] = useState(false);
+
   useEffect(() => {
     const movieWords = getWords(categoryId, deckId);
     setWords(shuffle(movieWords));
@@ -43,34 +45,37 @@ export default function Game() {
   const currentWord =
     words[currentIndex]?.word || "Loading...";
 
-  function nextCorrect() {
-  setCorrect((c) => c + 1);
+  function nextWord() {
+    setCurrentIndex((i) => {
+      if (i + 1 >= words.length) {
+        setWords(shuffle([...words]));
+        return 0;
+      }
+      return i + 1;
+    });
+  }
 
-  setCurrentIndex((i) => {
-    if (i + 1 >= words.length) {
-      setWords(shuffle([...words]));
-      return 0;
+  function handleTilt(direction) {
+    if (gameLocked) return;
+
+    setGameLocked(true);
+
+    if (direction === "correct") {
+      setCorrect((c) => c + 1);
+    } else {
+      setPassed((p) => p + 1);
     }
-    return i + 1;
+
+    nextWord();
+
+    setTimeout(() => {
+      setGameLocked(false);
+    }, 1500);
+  }
+
+  useDeviceTilt({
+    onTilt: handleTilt,
   });
-}
-
-  function nextPass() {
-  setPassed((p) => p + 1);
-
-  setCurrentIndex((i) => {
-    if (i + 1 >= words.length) {
-      setWords(shuffle([...words]));
-      return 0;
-    }
-    return i + 1;
-  });
-}
-
-useDeviceTilt({
-  onCorrect: nextCorrect,
-  onPass: nextPass,
-});
 
   return (
     <motion.div
@@ -98,7 +103,6 @@ useDeviceTilt({
         </div>
       </div>
 
-
       {/* Word Card */}
 
       <div className="flex flex-1 items-center justify-center">
@@ -117,14 +121,14 @@ useDeviceTilt({
 
       <div className="grid grid-cols-2 gap-4 mb-4">
         <button
-          onClick={nextCorrect}
+          onClick={() => handleTilt("correct")}
           className="rounded-2xl bg-green-500 py-5 text-xl font-bold text-white active:scale-95"
         >
           Correct
         </button>
 
         <button
-          onClick={nextPass}
+          onClick={() => handleTilt("pass")}
           className="rounded-2xl bg-red-500 py-5 text-xl font-bold text-white active:scale-95"
         >
           Pass

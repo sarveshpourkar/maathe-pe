@@ -4,7 +4,7 @@ const decks = {
     { id: "80s", title: "80s Bollywood", description: "Classic hits" },
     { id: "90s", title: "90s Bollywood", description: "Nostalgia pack" },
     { id: "2000s", title: "2000s Bollywood", description: "Millennium hits" },
-    { id: "2010plus", title: "2010+ Bollywood", description: "Modern blockbusters" },
+    { id: "after2010", title: "2010+ Bollywood", description: "Modern blockbusters" },
     { id: "comedy", title: "Comedy Movies", description: "Laugh-out-loud films" },
   ],
 

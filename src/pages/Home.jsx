@@ -7,6 +7,7 @@ import {
   UtensilsCrossed,
   Laugh,
   Play,
+  Settings,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -41,6 +42,18 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col">
+
+    <div className="flex justify-end">
+  <button
+    onClick={() => navigate("/settings")}
+    className="rounded-full border border-white/10 bg-[#151E2E] p-3 transition-all duration-300 hover:border-orange-400/40 hover:bg-[#1B2638]"
+  >
+    <Settings
+      size={22}
+      className="text-slate-300"
+    />
+  </button>
+</div>
 
       {/* Hero */}
 

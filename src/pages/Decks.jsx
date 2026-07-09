@@ -31,7 +31,7 @@ export default function Decks() {
       >
         <button
           onClick={() => navigate("/categories")}
-          className="mb-6 flex items-center gap-2 text-slate-400 transition hover:text-white"
+          className="mb-8 flex items-center gap-2 text-slate-400 transition-all duration-200 hover:-translate-x-1 hover:text-orange-400"
         >
           <ArrowLeft size={20} />
           Categories
@@ -47,9 +47,25 @@ export default function Decks() {
               {category.title}
             </h1>
 
-            <p className="mt-1 text-slate-400">
-              Choose a deck
+            <p className="mt-2 max-w-sm leading-6 text-slate-400">
+            Pick a deck and start guessing with your friends.
             </p>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+
+  <div className="rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1">
+    <span className="text-xs font-semibold text-orange-400">
+      {deckList.length} Decks
+    </span>
+  </div>
+
+  <div className="rounded-full border border-white/10 bg-[#151E2E] px-3 py-1">
+    <span className="text-xs font-semibold text-slate-300">
+      3000+ Cards
+    </span>
+  </div>
+
+</div>
           </div>
         </div>
       </motion.div>
@@ -60,12 +76,15 @@ export default function Decks() {
         {deckList.map((deck) => (
           <motion.button
             key={deck.id}
-            whileHover={{ y: -2 }}
+            whileHover={{
+            y: -4,
+            scale: 1.01,
+            }}
             whileTap={{ scale: 0.98 }}
             onClick={() =>
               navigate(`/play/${categoryId}/${deck.id}`)
             }
-            className="group flex w-full items-center justify-between rounded-3xl border border-white/10 bg-[#151E2E] p-5 transition hover:border-orange-400/30 hover:bg-[#1B2638]"
+            className="group flex w-full items-center justify-between rounded-3xl border border-white/10 bg-[#151E2E] p-5 shadow-lg shadow-black/20 transition-all duration-300 hover:border-orange-400/40 hover:bg-[#1B2638] hover:shadow-orange-500/10"
           >
             <div className="text-left">
               <h2 className="text-xl font-semibold text-white">
@@ -75,11 +94,21 @@ export default function Decks() {
               <p className="mt-1 text-sm text-slate-400">
                 {deck.description}
               </p>
+
+              <div className="mt-3 inline-flex rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1">
+  <span className="text-xs font-semibold text-orange-400">
+    Play Deck
+  </span>
+</div> 
+
             </div>
 
-            <ChevronRight
-              className="text-slate-500 transition group-hover:translate-x-1 group-hover:text-orange-400"
-            />
+            <div className="rounded-full bg-white/5 p-3 transition-all duration-300 group-hover:bg-orange-500/15">
+  <ChevronRight
+    size={20}
+    className="text-slate-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-orange-400"
+  />
+</div>
           </motion.button>
         ))}
       </div>

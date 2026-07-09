@@ -1,18 +1,7 @@
-import {
-  Trophy,
-  RotateCcw,
-  Home,
-  CheckCircle,
-  SkipForward,
-  Target,
-  BarChart,
-} from "lucide-react";
+import { Trophy } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
-import Confetti from "react-confetti";
-import CountUp from "react-countup";
 
-import Button from "../components/Button";
 
 export default function Results() {
   const navigate = useNavigate();
@@ -97,7 +86,7 @@ export default function Results() {
 
   function StatCard({ label, value, color, suffix = "" }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-[#151E2E] p-5">
+    <div className="rounded-3xl border border-white/10 bg-[#151E2E] p-5 shadow-lg shadow-black/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-orange-500/10">
       <p className="text-sm text-slate-400">{label}</p>
 
       <h2 className={`mt-2 text-3xl font-black ${color}`}>
@@ -119,7 +108,7 @@ export default function Results() {
 
       <div className="flex min-h-screen flex-col items-center justify-center px-6 py-8 text-center">
 
-        <div className="rounded-full border border-yellow-400/30 bg-yellow-400/10 p-7 shadow-2xl shadow-yellow-400/20">
+        <div className="rounded-full border border-yellow-400/30 bg-yellow-400/10 p-8 shadow-[0_0_60px_rgba(250,204,21,0.25)]">
 
           <Trophy
             size={90}
@@ -134,7 +123,7 @@ export default function Results() {
           {performance.title}
         </h1>
 
-        <p className="mt-4 max-w-sm text-slate-400">
+        <p className="mt-4 max-w-sm text-base leading-7 text-slate-400">
           {performance.message}
         </p>
 
@@ -169,7 +158,7 @@ export default function Results() {
 
           <button
   onClick={() => navigate("/categories")}
-  className="w-full rounded-2xl bg-orange-500 py-4 text-white"
+  className="w-full rounded-3xl bg-orange-500 py-4 text-lg font-bold text-white shadow-lg shadow-orange-500/20 transition-all duration-300 hover:bg-orange-400 active:scale-95"
 >
   Play Again
 </button>

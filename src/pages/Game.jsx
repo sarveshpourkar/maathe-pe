@@ -96,8 +96,8 @@ export default function Game() {
           </h1>
         </div>
 
-        <div className="rounded-2xl bg-orange-500 px-5 py-3">
-          <span className="text-2xl font-black text-white">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-orange-400/30 bg-orange-500/10 shadow-lg shadow-orange-500/20">
+          <span className="text-3xl font-black text-orange-400">
             {timeLeft}
           </span>
         </div>
@@ -109,9 +109,14 @@ export default function Game() {
         <motion.div
           key={currentWord}
           layout
-          className="flex h-72 w-full items-center justify-center rounded-[32px] border border-white/10 bg-[#151E2E] p-8"
+
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.2 }}
+
+          className="flex h-80 w-full items-center justify-center rounded-[40px] border border-white/10 bg-[#151E2E] p-10 shadow-2xl shadow-black/30"
         >
-          <h2 className="text-center text-5xl font-black text-white">
+          <h2 className="text-center text-6xl font-black uppercase tracking-wide text-white">
             {currentWord}
           </h2>
         </motion.div>
@@ -122,14 +127,14 @@ export default function Game() {
       <div className="grid grid-cols-2 gap-4 mb-4">
         <button
           onClick={() => handleTilt("correct")}
-          className="rounded-2xl bg-green-500 py-5 text-xl font-bold text-white active:scale-95"
+          className="rounded-3xl bg-green-500 py-5 text-xl font-bold text-white shadow-lg shadow-green-500/20 transition-all hover:bg-green-400 active:scale-95"
         >
           Correct
         </button>
 
         <button
           onClick={() => handleTilt("pass")}
-          className="rounded-2xl bg-red-500 py-5 text-xl font-bold text-white active:scale-95"
+          className="rounded-3xl bg-red-500 py-5 text-xl font-bold text-white shadow-lg shadow-red-500/20 transition-all hover:bg-red-400 active:scale-95"
         >
           Pass
         </button>
@@ -137,7 +142,7 @@ export default function Game() {
 
       {/* Bottom Score */}
 
-      <div className="mb-2 flex justify-between rounded-2xl border border-white/10 bg-[#151E2E] px-6 py-5">
+      <div className="mb-2 flex justify-between rounded-3xl border border-white/10 bg-[#151E2E] px-6 py-5 shadow-lg shadow-black/20">
         <div className="text-center">
           <p className="text-sm text-slate-400">
             Correct

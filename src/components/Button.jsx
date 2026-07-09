@@ -10,8 +10,7 @@ export default function Button({
   ...props
 }) {
   const baseStyles =
-    "w-full rounded-2xl px-6 py-4 text-base font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400/40 cursor-pointer";
-
+  "flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400/40 cursor-pointer";
   const variants = {
     primary:
       "bg-orange-500 text-white hover:bg-orange-400 active:scale-[0.98] shadow-lg shadow-orange-500/20",
@@ -25,7 +24,13 @@ export default function Button({
 
   return (
     <motion.button
-      whileTap={{ scale: 0.98 }}
+      whileHover={{
+  scale: 1.02,
+  y: -2,
+}}
+whileTap={{
+  scale: 0.97,
+}}
       type={type}
       onClick={onClick}
       className={clsx(baseStyles, variants[variant], className)}

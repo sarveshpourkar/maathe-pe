@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+
 import {
   ArrowRight,
   Clapperboard,
@@ -49,27 +50,67 @@ export default function Home() {
         transition={{ duration: 0.45 }}
         className="pt-12"
       >
-        <p className="text-sm font-semibold uppercase tracking-[0.35em] text-orange-400">
-          Maathe Pe
-        </p>
+        <div className="flex justify-center">
+        
+         <div className="absolute h-44 w-44 rounded-full bg-gradient-to-r from-orange-500/20 to-yellow-500/20 blur-2xl" />
+  <img
+    src="/logo.png"
+    alt="Maathe Pe Logo"
+    className="h-40 w-40 object-contain"
+  />
+</div>
+
+
 
         <h1 className="mt-5 text-5xl font-black leading-tight text-white">
           Think Fast.
           <br />
-          Laugh Hard.
+          Guess Faster.
         </h1>
 
         <p className="mt-5 max-w-xl text-base leading-7 text-slate-400">
-          Place your phone on your forehead, let your friends give clues,
-          and guess as many words as you can before the timer runs out.
+          The ultimate Heads Up party game.
+Tilt your phone, guess the word,
+and see who becomes the champion.
         </p>
 
         <div className="mt-10">
           <Button onClick={() => navigate("/categories")}>
-            <Play size={20} />
+            <Play size={22} fill="currentColor" />
             Start Playing
           </Button>
         </div>
+
+        <div className="mt-10 grid grid-cols-3 gap-4">
+
+  <div className="rounded-2xl border border-white/10 bg-[#121D2D] p-4 text-center">
+    <h3 className="text-2xl font-black text-orange-400">
+      9
+    </h3>
+    <p className="mt-1 text-xs text-slate-400">
+      Categories
+    </p>
+  </div>
+
+  <div className="rounded-2xl border border-white/10 bg-[#121D2D] p-4 text-center">
+    <h3 className="text-2xl font-black text-orange-400">
+      45
+    </h3>
+    <p className="mt-1 text-xs text-slate-400">
+      Decks
+    </p>
+  </div>
+
+  <div className="rounded-2xl border border-white/10 bg-[#121D2D] p-4 text-center">
+    <h3 className="text-2xl font-black text-orange-400">
+      3000+
+    </h3>
+    <p className="mt-1 text-xs text-slate-400">
+      Cards
+    </p>
+  </div>
+
+</div>
       </motion.section>
 
       {/* Categories */}
@@ -135,6 +176,8 @@ export default function Home() {
       </motion.section>
 
       <div className="mt-auto">
+
+        
         <Footer />
       </div>
     </div>

@@ -46,6 +46,12 @@ import ceos from "./corporate/ceos";
 import products from "./corporate/products";
 import corporateMixed from "./corporate/mixed";
 
+import indianMemes from "./memes/indian";
+import internetMemes from "./memes/internet";
+import memeTemplates from "./memes/templates";
+import viralMemes from "./memes/viral";
+import mixedMemes from "./memes/mixed";
+
 export function getWords(categoryId, deckId) {
   if (categoryId === "bollywood") {
     switch (deckId) {
@@ -206,6 +212,28 @@ if (categoryId === "corporate") {
     case "mixed":
     default:
       return corporateMixed;
+  }
+}
+
+if (categoryId === "memes") {
+  switch (deckId) {
+    case "indian":
+      return indianMemes;
+
+    case "internet":
+      return internetMemes;
+
+    case "templates":
+      return memeTemplates;
+
+    case "viral":
+      return viralMemes;
+
+    case "mixed":
+      return mixedMemes;
+
+    default:
+      return mixedMemes;
   }
 }
 

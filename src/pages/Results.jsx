@@ -1,6 +1,7 @@
 import { Trophy } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import winSound from "../assets/sounds/win.mp3";
 
 
 export default function Results() {
@@ -17,10 +18,17 @@ export default function Results() {
       ? 0
       : Math.round((correct / total) * 100);
 
+  const victoryAudio = useRef(new Audio(winSound));
   const [windowSize, setWindowSize] = useState({
+  
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  
+useEffect(() => {
+  victoryAudio.current.currentTime = 0;
+  victoryAudio.current.play();
+}, []);
 
   useEffect(() => {
     function handleResize() {
@@ -38,6 +46,8 @@ export default function Results() {
         handleResize
       );
   }, []);
+
+  
 
   const performance = useMemo(() => {
     if (correct >= 50) {

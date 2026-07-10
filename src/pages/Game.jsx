@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import categories from "../data/categories";
@@ -8,6 +8,9 @@ import { getWords } from "../data/words";
 import useTimer from "../hooks/useTimer";
 import shuffle from "../utils/shuffle";
 import useDeviceTilt from "../hooks/useDeviceTilt";
+
+import correctSound from "../assets/sounds/correct.mp3";
+import passSound from "../assets/sounds/pass.mp3";
 
 export default function Game() {
   const { categoryId, deckId } = useParams();
@@ -25,6 +28,9 @@ export default function Game() {
   const [passed, setPassed] = useState(0);
 
   const [gameLocked, setGameLocked] = useState(false);
+
+  const correctAudio = new Audio(correctSound);
+  const passAudio = new Audio(passSound);
 
   useEffect(() => {
     const movieWords = getWords(categoryId, deckId);
@@ -61,10 +67,16 @@ export default function Game() {
     setGameLocked(true);
 
     if (direction === "correct") {
-      setCorrect((c) => c + 1);
-    } else {
-      setPassed((p) => p + 1);
-    }
+  correctAudio.currentTime = 0;
+  correctAudio.play();
+
+  setCorrect((c) => c + 1);
+} else {
+  passAudio.currentTime = 0;
+  passAudio.play();
+
+  setPassed((p) => p + 1);
+}
 
     nextWord();
 

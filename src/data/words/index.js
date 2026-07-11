@@ -52,6 +52,27 @@ import memeTemplates from "./memes/templates";
 import viralMemes from "./memes/viral";
 import mixedMemes from "./memes/mixed";
 
+const everythingMixed = [
+  ...mixedMovies,
+  ...cricketMixed,
+  ...foodMixed,
+  ...animalsMixed,
+  ...sportsMixed,
+  ...musicMixed,
+  ...televisionMixed,
+  ...corporateMixed,
+  ...mixedMemes,
+];
+
+const uniqueEverythingMixed = Array.from(
+  new Map(
+    everythingMixed.map((item) => [
+      item.word.toLowerCase(),
+      item,
+    ])
+  ).values()
+);
+
 export function getWords(categoryId, deckId) {
   if (categoryId === "bollywood") {
     switch (deckId) {
@@ -234,6 +255,16 @@ if (categoryId === "memes") {
 
     default:
       return mixedMemes;
+  }
+}
+
+if (categoryId === "mixed") {
+  switch (deckId) {
+    case "ultimate":
+      return uniqueEverythingMixed;
+
+    default:
+      return uniqueEverythingMixed;
   }
 }
 
